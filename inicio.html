@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Menu Principal</title>
+    <style>
+        html, body {height: 100%; margin: 0;}
+
+        body {background: #fdd1d16e; overflow: hidden; display: flex; justify-content: center; align-items: center; 
+          font-family: Arial, sans-serif;}
+
+        .full-image {position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover; object-position: center; filter: brightness(40%);
+          z-index: -1;}
+
+        .menu-box {background: rgba(255, 255, 255, 0.15); padding: 40px 60px; border-radius: 20px; backdrop-filter: blur(8px);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.3); display: flex; flex-direction: column; gap: 20px; text-align: center; width: 80%;  
+          max-width: 700px; animation: fadeIn 1s ease;}
+
+        .menu-box h2 {margin: 0 0 20px 0; font-size: 40px; color: #ffffff; text-shadow: 1px 1px 4px rgba(0,0,0,0.7);}
+
+        .menu-box a {position: relative; display: block; padding: 14px; text-decoration: none; color: #ffffff; font-size: 20px;
+          font-weight: bold; border-radius: 10px; overflow: hidden; transition: color 0.3s ease;}
+
+        /* EFECTO CARGA */
+        .menu-box a::before {content: ""; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: #c09e3fff;
+          z-index: -1; transition: width 0.6s ease;}
+
+        .menu-box a:hover::before {width: 100%;}
+
+        .menu-box a:hover {color: #000;}
+
+        /* ENTRADA MENU BOX */
+        @keyframes fadeIn {from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);}}
+        
+    </style>
+  </head>
+  <body>
+
+    <!-- FONDO DE PAGINA -->
+    <img class="full-image"
+      src="C:\Users\CRISTIAN JARA\Desktop\Tareas\html\imagenes\siglo xii.png"
+      alt=""
+      loading="eager"
+      decoding="async"
+    />
+
+    <!-- MENU -->
+    <div class="menu-box">
+      <h2>Bienvenido, Usuario</h2>
+      <a href="#">Administrador</a>
+      <a href="bodega.html">Bodega</a>
+      <a href="cocina.html">Cocina</a>
+      <a href="#">Finanzas</a>
+      <a href="#">Cliente</a>
+    </div>
+
+    <!-- RESPONSIVIDAD -->
+    <script>
+      function fixVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      fixVH();
+      window.addEventListener('resize', fixVH);
+    </script>
+
+  </body>
+</html>
+
+

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pedidos de Clientes</title>
+
+  <style>
+    html, body {height: 100%; margin: 0;}
+
+    body {background: #fdd1d16e; overflow: auto; display: flex; justify-content: center; align-items: flex-start;
+      font-family: Arial, sans-serif; padding: 30px;}
+
+    .full-image {position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover; object-position: center;
+      filter: brightness(40%); z-index: -1;}
+
+    .menu-box {position: relative; background: rgba(255, 255, 255, 0.15); padding: 30px 50px;
+      border-radius: 20px; backdrop-filter: blur(8px); box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      width: 90%; max-width: 1000px; color: #fff; margin-bottom: 40px; animation: fadeIn 1s ease forwards;}
+
+    .menu-box h2 {margin: 0 0 20px 0; font-size: 32px; color: #ffffff; text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+      text-align: center;}
+
+    .btn-menu {position: absolute; top: 15px; left: 15px; background: #9e802dff; color: #000;
+      padding: 8px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex;
+      align-items: center; gap: 5px; border: none; transition: background 0.3s ease;}
+    
+      .btn-menu:hover {background: #e2c55a;}
+
+    .cards-container {display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;}
+
+    .card {position: relative; background: rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3); color: #fff; backdrop-filter: blur(5px);}
+
+    .order-number {position: absolute; top: 10px; left: 15px; font-size: 16px; font-weight: bold;
+      color: #ffd700;}
+
+    .order-status {position: absolute; top: 10px; right: 15px; font-size: 16px; font-weight: bold;
+      padding: 3px 8px; border-radius: 8px; color: #fff;}
+
+    .order-status.pendiente {background-color: #ff4d4d;}
+   
+    .order-status.proceso {background-color: #ffcc00; color: #000;}
+   
+    .order-status.entregado {background-color: #28a745;}
+
+    .card-content {margin-top: 50px;}
+
+    .card-content p {margin: 5px 0; font-size: 16px;}
+
+    .status-select {position: absolute; top: 40px; right: 15px; padding: 2px 6px; border-radius: 5px;
+      border: none; font-weight: bold; cursor: pointer;}
+    
+    @keyframes fadeIn {from {opacity: 0; transform: translateY(-20px);} to {opacity: 1; transform: translateY(0);}}
+
+
+  </style>
+
+</head>
+<body>
+
+  <!-- FONDO -->
+  <img class="full-image"
+    src="C:\Users\CRISTIAN JARA\Desktop\Tareas\html\imagenes\siglo xii.png"
+    alt=""
+    loading="eager"
+    decoding="async"
+  />
+
+  <!-- LISTADO DE PEDIDOS -->
+  <div class="menu-box">
+    <h2>Pedidos de Clientes</h2>
+
+    <!-- BOTÓN VOLVER AL MENÚ PRINCIPAL -->
+    <button class="btn btn-menu" onclick="volverMenu()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" viewBox="0 0 24 24">
+      <path d="M15 18l-6-6 6-6" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    
+    <!-- PEDIDOS -->
+    <div class="cards-container">
+        
+        <div class="card" data-id="001">
+            <span class="order-number">#001</span>
+            <span class="order-status pendiente" onclick="cambiarEstado(this)">Pendiente</span>
+            <div class="card-content">
+            <p><strong>Platillo:</strong> Pizza Napolitana</p>
+            <p><strong>Cantidad:</strong> 2</p>
+            <p><strong>Solicitudes:</strong> Sin cebolla, extra queso</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="order-number">#002</span>
+            <span class="order-status pendiente" onclick="cambiarEstado(this)">Pendiente</span>
+            <div class="card-content">
+            <p><strong>Platillo:</strong> Hamburguesa con queso</p>
+            <p><strong>Cantidad:</strong> 1</p>
+            <p><strong>Solicitudes:</strong> Sin pepinillos</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="order-number">#003</span>
+            <span class="order-status pendiente" onclick="cambiarEstado(this)">Pendiente</span>
+            <div class="card-content">
+            <p><strong>Platillo:</strong> Ensalada César</p>
+            <p><strong>Cantidad:</strong> 3</p>
+            <p><strong>Solicitudes:</strong> Vinagreta aparte</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="order-number">#004</span>
+            <span class="order-status pendiente" onclick="cambiarEstado(this)">Pendiente</span>
+            <div class="card-content">
+            <p><strong>Platillo:</strong> Spaghetti Boloñesa</p>
+            <p><strong>Cantidad:</strong> 1</p>
+            <p><strong>Solicitudes:</strong> Sin queso</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="order-number">#005</span>
+            <span class="order-status pendiente" onclick="cambiarEstado(this)">Pendiente</span>
+            <div class="card-content">
+            <p><strong>Platillo:</strong> Lasagna</p>
+            <p><strong>Cantidad:</strong> 2</p>
+            <p><strong>Solicitudes:</strong> Extra salsa</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <span class="order-number">#006</span>
+            <span class="order-status pendiente" onclick="cambiarEstado(this)">Pendiente</span>
+            <div class="card-content">
+            <p><strong>Platillo:</strong> Tacos</p>
+            <p><strong>Cantidad:</strong> 3</p>
+            <p><strong>Solicitudes:</strong> Picante suave</p>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    function volverMenu() {window.location.href = "inicio.html";}
+
+    function cambiarEstado(span) {
+    if(span.classList.contains('pendiente')) {
+        span.className = 'order-status proceso';
+        span.innerText = 'En Proceso';
+    } else if(span.classList.contains('proceso')) {
+        span.className = 'order-status entregado';
+        span.innerText = 'Entregado';
+    } else {
+        span.className = 'order-status pendiente';
+        span.innerText = 'Pendiente';
+    }}
+
+  </script>
+
+</body>
+</html>
