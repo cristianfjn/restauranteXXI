@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <link rel="stylesheet" href="css/login.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {background: rgba(255, 255, 255, 0.15); padding: 40px; border-radius: 10px; backdrop-filter: blur(8px);
+          box-shadow: 0 0 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; gap: 20px; text-align: center; width: 320px;  
+          max-width: 700px; animation: fadeIn 1s ease;}
+
+        h2 {
+            margin-bottom: 20px;
+            color: #f1f1f1ff;
+        }
+
+        p {color: #f1f1f1ff;}
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #f1f1f1ff;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .message a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .message a:hover {
+            text-decoration: underline;
+        }
+
+        .full-image {position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover; object-position: center; filter: brightness(40%);
+          z-index: -1;}
+    </style>
+</head>
+<body>
+
+    <!-- FONDO DE PAGINA -->
+    <img class="full-image"
+      src="C:\Users\CRISTIAN JARA\Desktop\Tareas\proyecto restaurante XXI\imagenes\siglo xii.png"
+      alt=""
+      loading="eager"
+      decoding="async"
+    />
+
+
+<div class="container">
+    <h2>Iniciar Sesión</h2>
+    <form onsubmit="iniciarSesion(event)">
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu usuario" required>
+
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+
+        <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <div class="message">
+        <p>¿No tienes una cuenta? <a href="register.html">Regístrate aquí</a></p>
+    </div>
+</div>
+
+<script>
+    // Simula un inicio de sesión sin servidor ni base de datos
+    function iniciarSesion(event) {
+        event.preventDefault();
+        const usuario = document.getElementById("usuario").value;
+        const password = document.getElementById("password").value;
+
+        if (usuario && password) {
+            alert(`Inicio de sesión exitoso.\nBienvenido, ${usuario}! (modo sin conexión)`);
+            window.location.href = "index.html"; // Redirige a la página principal
+        } else {
+            alert("Por favor, completa todos los campos.");
+        }
+    }
+
+    function fixVH() {
+        document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+      }
+      fixVH();
+      window.addEventListener('resize', fixVH);
+</script>
+</body>
+</html>
+
