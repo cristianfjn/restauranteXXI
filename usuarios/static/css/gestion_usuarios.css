@@ -1,0 +1,52 @@
+html, body {height: 100%; margin: 0;}
+
+/* FONDO */
+.full-image {position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover; object-position: center;
+    filter: brightness(40%); z-index: -1;}
+
+/* CONTENEDOR PRINCIPAL */
+.background {display: flex; justify-content: center; padding: 40px 0;
+  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+
+.menu-box {background: rgba(255, 255, 255, 0.15); padding: 30px 50px; border-radius: 20px;
+    backdrop-filter: blur(8px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); text-align: center;
+    width: 90%; max-width: 1000px; animation: fadeIn 1s ease; color: #fff; margin-bottom: 40px;}
+
+.menu-box h2 {margin: 0 0 20px 0; font-size: 32px; color: #ffffff; 
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.7);}
+
+/* TABLA */
+table {width: 100%; border-collapse: collapse; margin-top: 20px;}
+
+th, td {padding: 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.3);
+    font-size: 16px;}
+
+th {background: rgba(255, 255, 255, 0.2); font-size: 18px;}
+
+tr:hover {background: rgba(255, 255, 255, 0.1);}
+
+/* Botones */
+.action-buttons button {
+  margin-right: 5px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background-color: #667eea;
+  color: #000000;
+}
+
+.btn-delete {
+  background-color: #ff6b6b;
+  color: #000000;
+}
+
+/* BOTON VOLVER AL MENU */
+.btn {display: inline-block; background: #9e802dff; color: #000; font-weight: bold; padding: 10px 20px;
+    border: none; border-radius: 10px; cursor: pointer; font-size: 16px; margin: 5px; 
+    transition: background 0.3s ease; top: 15px; left: 15px; position: absolute; }
+
+.btn:hover {background: #e2c55a;}

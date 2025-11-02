@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de Usuarios</title>
+  <link rel="stylesheet" href="{% static 'css/gestion_usuarios.css' %}">
+</head>
+<body>
+
+<!-- FONDO -->
+<img class="full-image"
+     src="{% static 'imagenes/siglo xii.png' %}"
+     alt="Fondo del restaurante"
+     loading="eager"
+     decoding="async" />
+
+<!-- CONTENEDOR -->
+<div class="background">
+  <div class="menu-box">
+    <h2>Listado de Usuarios</h2>
+
+    <!-- VOLVER -->
+    <button class="btn btn-menu" onclick="window.location.href='{% url 'administrador' %}'">
+        Volver al menu
+    </button>
+
+    <table id="usuariosTable">
+      <thead>
+        <tr>
+          <th>Nombre de Usuario</th>
+          <th>Email</th>
+          <th>Grupo(s)</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u.username }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            {% for g in u.groups.all %}
+              {{ g.name }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+              Sin grupo
+            {% endfor %}
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-edit"
+                onclick="window.location.href='{% url 'admin:auth_user_change' u.id %}'">✏️ Editar</button>
+
+              <form method="POST" action="{% url 'eliminar_usuario' %}" style="display:inline;"
+                    onsubmit="return confirm('¿Deseas eliminar al usuario {{ u.username }}?');">
+                {% csrf_token %}
+                <input type="hidden" name="usuario_id" value="{{ u.id }}">
+                <button type="submit" class="btn-delete">🗑️ Eliminar</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">No hay usuarios registrados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
+

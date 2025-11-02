@@ -1,0 +1,131 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bodega de Productos y Pedidos</title>
+  <link rel="stylesheet" href="{% static 'css/cocina.css' %}">
+  <style>
+    .pedido-item {
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #fff;
+    }
+    .pedido-item:hover {
+      opacity: 0.8;
+    }
+
+    /* Colores según estado */
+    .pendiente {
+      background-color: rgba(255, 0, 0, 0.7); /* rojo */
+    }
+    .preparacion {
+      background-color: rgba(255, 165, 0, 0.7); /* naranja/amarillo */
+    }
+    .listo {
+      background-color: rgba(0, 128, 0, 0.7); /* verde */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- FONDO -->
+  <img class="full-image"
+       src="{% static 'imagenes/siglo xii.png' %}"
+       alt="Fondo del restaurante"
+       loading="eager"
+       decoding="async" />
+
+  <!-- CONTENEDOR PRINCIPAL CON DOS COLUMNAS -->
+  <div class="contenedor-principal">
+
+    <!-- COLUMNA IZQUIERDA: PEDIDOS -->
+    <div class="col-pedidos">
+      <h2>Listado de Pedidos</h2>
+
+      <!-- Pedidos pendientes -->
+      <h3>Pendientes</h3>
+      <ul id="pendientes-list">
+        <li class="pedido-item pendiente" data-estado="pendiente" onclick="cambiarEstado(this)">
+          <strong>N° Pedido:</strong> 001<br>
+          <strong>Platillos:</strong> Pizza, Ensalada<br>
+          <strong>Comentarios:</strong> Sin gluten
+        </li>
+      </ul>
+
+      <!-- Pedidos en preparación -->
+      <h3>En Preparación</h3>
+      <ul id="preparacion-list"></ul>
+
+      <!-- Pedidos listos -->
+      <h3>Listo</h3>
+      <ul id="listo-list"></ul>
+    </div>
+
+    <!-- COLUMNA DERECHA: PRODUCTOS -->
+    <div class="col-productos">
+      <h2>Bodega de Productos</h2>
+
+      <table id="productosTable">
+        <thead>
+          <tr>
+            <th>Nombre del Producto</th>
+            <th>Cantidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in productos %}
+          <tr>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.cantidad }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="2">No hay productos registrados.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    function cambiarEstado(elemento) {
+      const estadoActual = elemento.getAttribute('data-estado');
+      let nuevoEstado;
+
+      // Determinar el nuevo estado
+      if (estadoActual === 'pendiente') {
+        nuevoEstado = 'preparacion';
+      } else if (estadoActual === 'preparacion') {
+        nuevoEstado = 'listo';
+      } else {
+        nuevoEstado = 'pendiente';
+      }
+
+      elemento.parentNode.removeChild(elemento);
+
+      // Actualizar estado y clase de color
+      elemento.setAttribute('data-estado', nuevoEstado);
+      elemento.classList.remove('pendiente', 'preparacion', 'listo');
+      elemento.classList.add(nuevoEstado);
+
+      // Agregar a la lista correspondiente
+      if (nuevoEstado === 'pendiente') {
+        document.getElementById('pendientes-list').appendChild(elemento);
+      } else if (nuevoEstado === 'preparacion') {
+        document.getElementById('preparacion-list').appendChild(elemento);
+      } else {
+        document.getElementById('listo-list').appendChild(elemento);
+      }
+    }
+  </script>
+
+</body>
+</html>
+

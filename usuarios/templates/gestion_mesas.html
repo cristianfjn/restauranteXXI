@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Mesas</title>
+
+  <!-- Enlace al CSS externo -->
+  <link rel="stylesheet" href="{% static 'css/gestion_mesas.css' %}">
+</head>
+<body>
+
+  <!-- FONDO -->
+  <img class="full-image"
+       src="{% static 'imagenes/siglo xii.png' %}"
+       alt="Fondo del restaurante"
+       loading="eager"
+       decoding="async" />
+
+  <h1>Gestión de Mesas</h1>
+
+  <!-- FORMULARIO PARA AGREGAR MESA -->
+  <div class="form-container">
+    <form method="POST">
+      {% csrf_token %}
+      <input type="number" name="numero" placeholder="Número de mesa" required>
+      <button type="submit" name="nueva_mesa" class="btn-agregar">Agregar Mesa</button>
+    </form>
+  </div>
+
+  <!-- TABLA DE MESAS -->
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for mesa in mesas %}
+        <tr class="{{ mesa.estado }}">
+          <td>{{ mesa.numero }}</td>
+          <td>{{ mesa.get_estado_display }}</td>
+          <td>
+            <!-- Cambiar estado -->
+            <form method="POST" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="mesa_id" value="{{ mesa.id }}">
+              <button type="submit" name="cambiar_estado" class="btn-estado">Cambiar Estado</button>
+            </form>
+
+            <!-- Eliminar mesa -->
+            <form action="{% url 'eliminar_mesa' mesa.id %}" method="POST" style="display:inline;" onsubmit="return confirm('¿Eliminar esta mesa?');">
+              {% csrf_token %}
+              <button type="submit" class="btn-eliminar">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="3">No hay mesas registradas.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BOTÓN VOLVER -->
+  <button class="btn-volver" onclick="window.location.href='{% url 'administrador' %}'">Volver al menú</button>
+
+</body>
+</html>
+

@@ -1,0 +1,86 @@
+html, body {height: 100%; margin: 0; font-family: Arial, sans-serif;}
+
+/* FONDO */
+.full-image {position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover; object-position: center;
+  filter: brightness(40%); z-index: -1;}
+
+  /* LISTA DE PLATILLOS */
+.contenedor-principal {display: flex; justify-content: center; gap: 20px; margin: 40px auto; max-width: 1200px;
+  align-items: flex-start; animation: fadeIn 0.5s ease-in-out;}
+
+.catalogo {background-color: rgba(167, 154, 154, 0.38); padding: 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  width: 600px;}
+
+.titulo {text-align: center; font-size: 2em; margin-bottom: 20px; color: rgba(255, 255, 255, 1);}
+
+.platillo {display: flex; align-items: center; justify-content: space-between; background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.38); border-radius: 10px; padding: 10px; margin-bottom: 15px;
+  transition: 0.3s;}
+
+.platillo img {width: 80px; height: 80px; border-radius: 10px; object-fit: cover; margin-right: 15px;}
+
+.info { flex: 1; }
+
+.nombre { font-weight: bold; font-size: 1.1em; color: #ddd; }
+
+.ingredientes { font-size: 0.9em; color: #ddd; }
+
+.precio { font-weight: bold; font-size: 1.2em; color: #f0c845ff; margin-left: 15px; }
+
+/* BOTONES */
+.btn {display: inline-block; background: #9e802dff; color: #000; font-weight: bold; padding: 10px 20px;
+    border: none; border-radius: 10px; cursor: pointer; font-size: 16px; transition: background 0.3s ease; }
+
+.btn:hover {background: #e2c55a;}
+
+.btn-editar {background-color: #f0c845ff; border: none; border-radius: 6px; padding: 6px 10px;
+  font-size: 0.9em; cursor: pointer; transition: 0.3s;}
+
+.btn-editar:hover {background-color: #bea44bff; transform: scale(1.05);}
+
+.btn-eliminar {background-color: #ff4d4d; border: none; border-radius: 6px; padding: 6px 10px;
+  font-size: 0.9em; cursor: pointer; transition: 0.3s;}
+
+.btn-eliminar:hover {background-color: #cc0000; transform: scale(1.05);}
+
+.btn-nuevo-container {padding: 12px 24px; font-size: 1.2em; text-align: center; margin-bottom: 1px;}
+
+/* MODAL */
+.modal {display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); justify-content: center;
+  align-items: center; z-index: 1000;}
+
+.modal-content {background: #fff; padding: 20px; border-radius: 10px; width: 320px; display: flex;
+  flex-direction: column; gap: 10px; box-sizing: border-box;}
+
+/* FORMULARIO DENTRO DEL MODAL */
+.modal-content form {display: flex; flex-direction: column; gap: 10px;}
+
+.modal-content label {font-weight: bold; margin-bottom: 5px;}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea {padding: 5px; border-radius: 5px; border: 1px solid #ccc; width: 100%;
+  box-sizing: border-box;}
+
+.modal-buttons {display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;}
+
+.modal-buttons button {padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer;
+  transition: 0.3s;}
+
+.modal-buttons .guardar {background-color: #f0c845ff;}
+
+.modal-buttons .guardar:hover {background-color: #bea44bff;}
+
+.modal-buttons .cancelar {background-color: #ccc;}
+
+.modal-buttons .cancelar:hover {background-color: #999;}
+
+.acciones {display: flex; align-items: center; gap: 10px;}
+
+.acciones .precio {font-weight: bold; font-size: 1.2em; color: #f0c845ff;}
+
+/*ANIMACION*/
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

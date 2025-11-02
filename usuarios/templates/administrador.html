@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administrador</title>
+
+  <!-- Vinculamos la hoja de estilos externa -->
+  <link rel="stylesheet" href="{% static 'css/administrador.css' %}">
+</head>
+<body>
+
+<!-- FONDO -->
+    <img class="full-image"
+         src="{% static 'imagenes/siglo xii.png' %}"
+         alt="Fondo del restaurante"
+         loading="eager"
+         decoding="async" />
+
+
+<!-- CONTENEDOR PRINCIPAL -->
+    <div class="menu-box">
+      <h2>Panel de administrador</h2>
+      <p>Selecciona una acción:</p>
+
+<!-- BOTONES -->
+    <button class="btn btn-menu" onclick="window.location.href='{% url 'logout' %}'">
+    Cerrar sesión
+    </button>
+
+      <div class="btn-list">
+        <button type="button" class="btn btn-primary"
+                onclick="window.location.href='{% url 'gestion_usuarios' %}'">Gestión de usuarios</button>
+        <button type="button" class="btn btn-primary"
+                onclick="window.location.href='{% url 'menu_cliente' %}'">Gestion de Productos</button>
+        <button type="button" class="btn btn-primary"
+                onclick="window.location.href='{% url 'gestion_mesas' %}'">Gestion de Mesas</button>
+        <button type="button" class="btn">Botón 4</button>
+        <button type="button" class="btn">Botón 5</button>
+      </div>
+    </div>
+</body>
+</html>
