@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edicion de Menu</title>
+  <link rel="stylesheet" href="{% static 'css/menu_cliente.css' %}">
+</head>
+
+<body>
+  <img class="full-image"
+       src="{% static 'imagenes/siglo xii.png' %}"
+       alt="Fondo"
+       loading="eager"
+       decoding="async"/>
+
+  <div class="contenedor-principal">
+    <div class="catalogo">
+
+<!-- BOTÓN VOLVER -->
+      <div class="btn-volver-container" style="text-align: left; margin-bottom: 15px;">
+        <button class="btn btn-menu" onclick="window.location.href='{% url 'administrador' %}'">
+          Volver al menú
+        </button>
+      </div>
+      <h1 class="titulo">Menú</h1>
+
+      <div class="btn-nuevo-container">
+        <button class="btn-editar" onclick="abrirModalNuevo()">Añadir Platillo</button>
+      </div>
+
+      {% for platillo in platillos %}
+      <div class="platillo">
+        {% if platillo.imagen %}
+          <img src="{{ platillo.imagen.url }}" alt="{{ platillo.nombre }}">
+        {% else %}
+          <img src="{% static 'imagenes/default.png' %}" alt="{{ platillo.nombre }}">
+        {% endif %}
+
+        <div class="info">
+          <div class="nombre">{{ platillo.nombre }}</div>
+          <div class="ingredientes">{{ platillo.ingredientes }}</div>
+        </div>
+        
+        <div class="acciones">
+          <div class="precio">${{ platillo.precio|floatformat:0 }}</div>
+          <button class="btn-editar" 
+                  onclick="abrirModalEditar('{{ platillo.id }}', '{{ platillo.nombre }}', '{{ platillo.ingredientes }}', '{{ platillo.precio }}')">
+                  Editar
+          </button>
+
+          <!-- BOTÓN ELIMINAR CON CONFIRMACIÓN -->
+          <form action="{% url 'eliminar_platillo' platillo.id %}" method="POST" style="display:inline;" 
+                onsubmit="return confirmarEliminacion('{{ platillo.nombre }}');">
+            {% csrf_token %}
+            <button type="submit" class="btn-eliminar">Eliminar</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Modal con formulario para añadir/editar -->
+  <div class="modal" id="modalEditar">
+    <div class="modal-content">
+      <form id="formPlatillo" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+ 
+        <input type="hidden" name="platillo_id" id="platillo_id" value="">
+        <label>Nombre</label>
+
+        <input type="text" id="modalNombre" name="nombre" required>
+        <label>Ingredientes</label>
+
+        <input type="text" id="modalIngredientes" name="ingredientes" required>
+        <label>Precio</label>
+
+        <input type="number" id="modalPrecio" name="precio" min="0" required>
+        <label>Imagen</label>
+
+        <input type="file" id="modalImagen" name="imagen" accept="image/*">
+
+        <div class="modal-buttons">
+          <button type="submit" class="guardar">Guardar</button>
+          <button type="button" class="cancelar" onclick="cerrarModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function abrirModalNuevo() {
+      document.getElementById('platillo_id').value = '';
+      document.getElementById('modalNombre').value = '';
+      document.getElementById('modalIngredientes').value = '';
+      document.getElementById('modalPrecio').value = '';
+      document.getElementById('modalImagen').value = '';
+      document.getElementById('modalEditar').style.display = 'flex';
+    }
+
+    function abrirModalEditar(id, nombre, ingredientes, precio) {
+      document.getElementById('platillo_id').value = id;
+      document.getElementById('modalNombre').value = nombre;
+      document.getElementById('modalIngredientes').value = ingredientes;
+      document.getElementById('modalPrecio').value = precio;
+      document.getElementById('modalEditar').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+      document.getElementById('modalEditar').style.display = 'none';
+    }
+
+    function confirmarEliminacion(nombre) {
+      return confirm(`¿Estás seguro de que deseas eliminar el producto "${nombre}"? Esta acción no se puede deshacer.`);
+    }
+    
+  </script>
+</body>
+</html>
+

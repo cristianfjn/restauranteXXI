@@ -1,0 +1,343 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bodega de Productos</title>
+    <link rel="stylesheet" href="{% static 'css/bodega.css' %}">
+<!-- LIBRERÍAS PARA EXPORTAR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+
+  <body>
+
+<!-- FONDO -->
+    <img class="full-image"
+         src="{% static 'imagenes/siglo xii.png' %}"
+         alt="Fondo del restaurante"
+         loading="eager"
+         decoding="async" />
+
+<!-- CONTENEDOR PRINCIPAL -->
+    <div class="menu-box">
+      <h2>Bodega de Productos</h2>
+
+<!-- BOTONES -->
+    <button class="btn btn-menu" onclick="window.location.href='{% url 'logout' %}'">
+    Cerrar sesión
+    </button>
+
+    <button class="btn" onclick="abrirModalAgregar()">➕ Agregar Producto</button>
+    <button class="btn excel" onclick="descargarExcel()">📗 Descargar Excel</button>
+    <button class="btn pdf" onclick="descargarPDF()">📕 Descargar PDF</button>
+
+<!-- TABLA DE PRODUCTOS -->
+      <table id="productosTable">
+        <thead>
+            <tr>
+            <th>Nombre del Producto</th>
+            <th>Proveedor</th>
+            <th>Cantidad</th>
+            <th>Stock mínimo</th>
+            <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr class="{% if p.cantidad < p.stock_minimo %}low-stock{% endif %}">
+                <td>{{ p.nombre }}</td>
+                <td>{{ p.proveedor }}</td>
+                <td>
+                {{ p.cantidad }}
+                {% if p.cantidad < p.stock_minimo %}
+                    ⚠️
+                {% endif %}
+                </td>
+
+                <td>{{ p.stock_minimo }}</td>
+                <td>
+                <div class="action-buttons">
+                    <button class="btn tooltip" data-text="Editar"
+                    onclick="abrirModalEditar('{{ p.id }}', '{{ p.nombre }}', '{{ p.proveedor }}', '{{ p.cantidad }}', '{{ p.stock_minimo }}')">✏️</button>
+
+                    <button class="btn tooltip" data-text="Movimiento"
+                    onclick="abrirModalMovimiento('{{ p.id }}', '{{ p.nombre }}', '{{ p.cantidad }}')">📊</button>
+
+                    <form method="POST" action="{% url 'bodega' %}" style="display:inline;"
+                        onsubmit="return confirmarEliminacion('{{ p.nombre }}')">
+                    {% csrf_token %}
+                    <input type="hidden" name="eliminar_id" value="{{ p.id }}">
+                    <button type="submit" class="btn btn-delete tooltip" data-text="Eliminar">🗑️</button>
+                    </form>
+                </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No hay productos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+<!-- MODAL AGREGAR/EDITAR PRODUCTO -->
+<div id="modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h3 id="modalTitle">Agregar Producto</h3>
+    <form id="productoForm" method="POST" action="{% url 'bodega' %}">
+      {% csrf_token %}
+      <input type="hidden" id="producto_id" name="producto_id">
+
+      <label>Nombre del Producto</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label>Proveedor</label>
+      <input type="text" id="proveedor" name="proveedor" required>
+
+      <label>Cantidad</label>
+      <input type="number" id="cantidad" name="cantidad" min="1" required>
+
+      <label>Stock mínimo</label>
+      <input type="number" id="minimo" name="stock_minimo" min="1" value="20" required>
+
+      <button type="submit" id="guardarBtn">Guardar</button>
+      <button type="button" class="close-btn" onclick="cerrarModal()">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL REGISTRAR MOVIMIENTO -->
+    <div id="modalMovimiento" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3 id="tituloMovimiento">Registrar Movimiento</h3>
+            <form id="movimientoForm" method="POST" action="{% url 'bodega' %}">
+            {% csrf_token %}
+            <input type="hidden" id="productoMovimiento_id" name="producto_id">
+            <label>Producto</label>
+            <input type="text" id="productoMovimiento_nombre" readonly>
+            <label>Tipo de Movimiento</label>
+            <select id="tipoMovimiento" name="tipoMovimiento" required>
+                <option value="ingreso">Ingreso (+)</option>
+                <option value="salida">Salida (−)</option>
+            </select>
+            <label>Cantidad</label>
+            <input type="number" id="cantidadMovimiento" name="cantidadMovimiento" min="1" required>
+            <button type="submit">Guardar</button>
+            <button type="button" class="close-btn" onclick="cerrarModalMovimiento()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+
+// MODAL AGREGAR
+        function abrirModalAgregar() {
+            document.getElementById("modalTitle").innerText = "Agregar Producto";
+            document.getElementById("producto_id").value = "";
+            document.getElementById("nombre").value = "";
+            document.getElementById("proveedor").value = "";
+            document.getElementById("cantidad").value = "";
+            document.getElementById("minimo").value = "20";
+            document.getElementById("modal").style.display = "flex";
+        }
+
+// MODAL EDITAR
+        function abrirModalEditar(id, nombre, proveedor, cantidad, minimo) {
+            document.getElementById("modalTitle").innerText = "Editar Producto";
+            document.getElementById("producto_id").value = id;
+            document.getElementById("nombre").value = nombre;
+            document.getElementById("proveedor").value = proveedor;
+            document.getElementById("cantidad").value = cantidad;
+            document.getElementById("minimo").value = minimo;
+            document.getElementById("modal").style.display = "flex";
+        }
+
+        function cerrarModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+
+// MODAL MOVIMIENTO
+        function abrirModalMovimiento(id, nombre, cantidad) {
+            document.getElementById("productoMovimiento_id").value = id;
+            document.getElementById("productoMovimiento_nombre").value = nombre;
+            document.getElementById("cantidadMovimiento").value = "";
+            document.getElementById("tipoMovimiento").value = "ingreso";
+            document.getElementById("modalMovimiento").style.display = "flex";
+        }
+
+        function cerrarModalMovimiento() {
+            document.getElementById("modalMovimiento").style.display = "none";
+        }
+
+        function guardarMovimiento() {
+            const tipo = document.getElementById("tipoMovimiento").value;
+            const cantidad = parseInt(document.getElementById("cantidadMovimiento").value);
+            const nombre = document.getElementById("productoMovimiento_nombre").value;
+
+            if (!cantidad || cantidad <= 0) {
+            alert("Por favor ingresa una cantidad válida.");
+            return;
+            }
+
+            alert(`Movimiento registrado: ${tipo === 'ingreso' ? '+' : '-'}${cantidad} unidades de ${nombre}.`);
+            cerrarModalMovimiento();
+        }
+
+//MODAL CONFIRMAR ELIMINACION
+        function confirmarEliminacion(nombre) {
+            return confirm(`¿Estás seguro de que deseas eliminar el producto "${nombre}"? Esta acción no se puede deshacer.`);
+        }
+
+// DESCARGAR EXCEL
+        async function descargarExcel() {
+            const workbook = new ExcelJS.Workbook();
+            const ws = workbook.addWorksheet("Inventario");
+
+            // --- ENCABEZADOS ---
+            ws.addRow(["Nombre del Producto", "Proveedor", "Cantidad", "Stock Mínimo"]);
+
+            ws.getRow(1).eachCell(cell => {
+                cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
+                cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "FF0070C0" }
+                };
+                cell.alignment = { horizontal: "center", vertical: "middle" };
+                cell.border = {
+                top: { style: "thin" },
+                left: { style: "thin" },
+                bottom: { style: "thin" },
+                right: { style: "thin" }
+                };
+            });
+
+            // --- OBTENER DATOS DE LA TABLA ---
+            const filas = document.querySelectorAll("#productosTable tbody tr");
+            let totalProductos = 0;
+
+            filas.forEach(fila => {
+                const celdas = fila.querySelectorAll("td");
+                if (celdas.length >= 4) {
+                const nombre = celdas[0].innerText.trim();
+                const proveedor = celdas[1].innerText.trim();
+                const cantidad = celdas[2].innerText.replace("⚠️","").trim();
+                const minimo = celdas[3].innerText.trim();
+
+                ws.addRow([nombre, proveedor, cantidad, minimo]);
+                totalProductos++;
+                }
+            });
+
+            // --- ESTILO PARA TODAS LAS CELDAS ---
+            ws.eachRow({ includeEmpty: false }, function(row, rowNumber) {
+                row.eachCell(cell => {
+                cell.alignment = { wrapText: true, vertical: "middle" };
+                cell.border = {
+                    top: { style: "thin" },
+                    left: { style: "thin" },
+                    bottom: { style: "thin" },
+                    right: { style: "thin" }
+                };
+                });
+            });
+
+            // --- AJUSTAR ANCHO DE COLUMNAS AUTOMÁTICAMENTE ---
+            ws.columns.forEach(column => {
+                let maxLength = 0;
+                column.eachCell({ includeEmpty: true }, cell => {
+                const val = cell.value ? cell.value.toString() : "";
+                maxLength = Math.max(maxLength, val.length);
+                });
+                column.width = maxLength + 5; // espacio extra
+            });
+
+            // --- Fila final con total ---
+            const filaTotal = ws.addRow(["", "TOTAL DE PRODUCTOS", totalProductos, ""]);
+            filaTotal.eachCell((cell, colNumber) => {
+                cell.font = { bold: true };
+                cell.alignment = { horizontal: "center", vertical: "middle" };
+                if (colNumber === 2) cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFCCE5FF" } };
+            });
+
+            // --- GUARDAR ---
+            const buffer = await workbook.xlsx.writeBuffer();
+            saveAs(new Blob([buffer]), "Informe_Bodega.xlsx");
+        }
+
+// DESCARGAR PDF
+        async function descargarPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+            // --- ENCABEZADO ---
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.text("Informe de Bodega", 105, 15, { align: "center" });
+
+            const fecha = new Date().toLocaleDateString();
+            doc.setFontSize(11);
+            doc.setTextColor(80);
+            doc.text(`Fecha: ${fecha}`, 15, 25);
+
+            // --- TITULOS DE COLUMNA ---
+            doc.setFontSize(12);
+            doc.setTextColor(0);
+            let y = 35;
+            doc.text("Nombre del Producto", 15, y);
+            doc.text("Proveedor", 80, y);
+            doc.text("Cantidad", 135, y);
+            doc.text("Stock Min.", 165, y);
+            doc.line(10, y + 2, 200, y + 2);
+
+            // --- DATOS DE TABLA ---
+            y += 10;
+            const filas = document.querySelectorAll("#productosTable tbody tr");
+            let total = 0;
+
+            filas.forEach(fila => {
+                const celdas = fila.querySelectorAll("td");
+                if (celdas.length >= 4) {
+                const nombre = celdas[0].innerText.trim();
+                const proveedor = celdas[1].innerText.trim();
+                const cantidad = celdas[2].innerText.replace("⚠️","").trim();
+                const stock = celdas[3].innerText.trim();
+
+                // Si la línea se acerca al final de la hoja, agrega nueva página
+                if (y > 270) {
+                    doc.addPage();
+                    y = 20;
+                }
+
+                // Imprimir con control de longitud (evita superposición)
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(11);
+                doc.text(nombre.substring(0, 30), 15, y, { maxWidth: 60 });
+                doc.text(proveedor.substring(0, 25), 80, y, { maxWidth: 45 });
+                doc.text(cantidad, 135, y);
+                doc.text(stock, 165, y);
+
+                y += 8; // Espaciado entre filas
+                total++;
+                }
+            });
+
+            // --- PIE DE PÁGINA ---
+            if (y > 260) {
+                doc.addPage();
+                y = 20;
+            }
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(0, 102, 204);
+            doc.text(`Total de productos: ${total}`, 15, y + 10);
+
+            doc.save("Informe_Bodega.pdf");
+        }
+
+    </script>
+  </body>
+</html>

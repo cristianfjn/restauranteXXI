@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Error de seguridad</title>
+    <style>
+        body {margin: 0; font-family: Arial, sans-serif; background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white; display: flex; align-items: center; justify-content: center; height: 100vh;
+            text-align: center; flex-direction: column; overflow: hidden;}
+
+        .card {background: rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 40px 60px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3); backdrop-filter: blur(10px); z-index: 1;}
+
+        h1 {font-size: 2rem; margin-bottom: 15px; color: #ffb3b3;}
+
+        p {font-size: 1.1rem; color: #f1f1f1cc;}
+
+        a {display: inline-block; margin-top: 25px; background: #e6b530; color: #000; padding: 12px 25px;
+            border-radius: 8px; font-weight: bold; text-decoration: none; transition: background 0.3s;}
+
+        a:hover {background: #c79f31;}
+
+        .full-image {position: fixed; inset: 0; width: 100vw; height: 100vh; object-fit: cover;
+            object-position: center; filter: brightness(40%); z-index: 0;}
+    </style>
+</head>
+<body>
+
+    <img class="full-image"
+         src="{% static 'imagenes/siglo xii.png' %}"
+         alt="Fondo del restaurante"
+         loading="eager"
+         decoding="async" />
+
+    <div class="card">
+        <h1>⚠️ Sesión expirada ⚠️</h1>
+        <p>Por su seguridad, su sesión ha caducado o el token ha sido invalidado.</p>
+        <p>Por favor, vuelva a iniciar sesión para continuar.</p>
+        <a href="{% url 'login' %}">Volver al inicio de sesión</a>
+    </div>
+
+</body>
+</html>

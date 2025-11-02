@@ -1,0 +1,38 @@
+body {font-family: Arial, sans-serif; background: linear-gradient(135deg, #3498db, #2c3e50);
+    margin: 0; padding: 0; height: 100vh; display: flex; align-items: center; justify-content: center;}
+
+.container {background: rgba(255, 255, 255, 0.15); padding: 40px; border-radius: 10px;
+    backdrop-filter: blur(8px); box-shadow: 0 0 15px rgba(0,0,0,0.2); display: flex; flex-direction: column;
+    gap: 20px; text-align: center; width: 340px; max-width: 90%; animation: fadeIn 1s ease;}
+
+h2 {margin-bottom: 10px; color: #f1f1f1ff;}
+
+
+.input-group {display: flex; flex-direction: column; align-items: flex-start; text-align: left; 
+    width: 100%;}
+
+label {font-weight: bold; margin-bottom: 5px; color: #f1f1f1ff; width: 100%;}
+
+input {width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;}
+
+button {background-color: #e6b530ff; border: none; padding: 10px; border-radius: 6px; 
+    font-size: 16px; cursor: pointer; margin-top: 10px; width: 100%;}
+
+button:hover {background-color: #c79f31ff;}
+
+.message {margin-top: 15px; font-size: 14px;}
+
+.message a {color: #3498db; text-decoration: none; font-weight: bold;}
+
+.message a:hover {text-decoration: underline;}
+
+.full-image {position: fixed; inset: 0; width: 100vw; height: 100vh; 
+    object-fit: cover; object-position: center; filter: brightness(40%); z-index: -1;}
+
+.error {color: #ffb3b3; font-size: 14px;}
+
+/*ANIMACION*/
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

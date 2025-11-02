@@ -1,0 +1,127 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #fdd1d16e;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  position: relative;
+}
+
+/* FONDO */
+.full-image {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(40%);
+  z-index: -1;
+}
+
+h1 {
+  color: rgba(255, 255, 255, 1);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.table-container, .form-container {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  backdrop-filter: blur(8px);
+  max-width: 800px;
+  width: 100%;
+  margin-bottom: 40px;
+  animation: fadeIn 1s ease;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #aaa;
+  padding: 10px;
+  text-align: center;
+}
+
+th {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+/* COLORES SEGÚN ESTADO */
+tr.disponible {
+  background-color: rgba(144, 238, 144, 0.6);
+}
+
+/* BOTONES */
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.btn-agregar {
+  background-color: #c09e3fff;
+}
+.btn-agregar:hover {
+  background-color: #b18830ff;
+}
+
+.btn-estado {
+  background-color: #4caf50;
+}
+.btn-estado:hover {
+  background-color: #45a049;
+}
+
+.btn-eliminar {
+  background-color: #e74c3c;
+  margin-left: 5px;
+}
+.btn-eliminar:hover {
+  background-color: #c0392b;
+}
+
+input[type="number"] {
+  padding: 8px;
+  margin-right: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* BOTÓN VOLVER */
+.btn-volver {
+  background-color: #c09e3fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: white;
+  margin-top: 10px;
+}
+.btn-volver:hover {
+  background-color: #b18830ff;
+}
